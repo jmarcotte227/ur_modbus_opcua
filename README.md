@@ -1,1 +1,1 @@
-AMPS digital project team:
+AMPS digital project team (Fall 2024):

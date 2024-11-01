@@ -1,3 +1,4 @@
 AMPS digital project team:
-- Jack Marcotte
 
+- Jack Marcotte
+- Julia Gizzo

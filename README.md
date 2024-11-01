@@ -1,4 +1,6 @@
 AMPS digital project team:
-Jaden Mirek
+- Jaden Mirek
 - Julia Gizzo
-
+- Kaitlin McConnon
+- Jack Marcotte
+- Brian Cooper

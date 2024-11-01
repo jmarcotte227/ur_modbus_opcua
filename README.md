@@ -1,1 +1,3 @@
-AMPS digital project team (Fall 2024):
+AMPS digital project team:
+Jaden Mirek
+- Julia Gizzo

@@ -10,6 +10,14 @@ import asyncio
 from pymodbus.client import AsyncModbusTcpClient
 from asyncua import Server
 from asyncua import ua
+from asyncua.server.user_managers import CertificateUserManager
+from asyncua.crypto.cert_gen import setup_self_signed_certificate
+import logging
+from pathlib import Path
+from cryptography.x509.oid import ExtendedKeyUsageOID
+import socket
+
+logging.basicConfig(level=logging.WARNING)
 
 # Configuration for the UR10e Modbus
 UR10e_MODBUS_IP = '128.113.220.57'  # UR10e IP Address
@@ -54,10 +62,44 @@ def to_signed(val):
     return val
 async def main():
     # Initialize OPC UA server
+    # cert_user_manager= CertificateUserManager()
+    # await cert_user_manager.add_admin(
+    #         "ThinkIQ.Opc.Ua.Connector [23B9EA5C7A3DD59361B14486BC12A8DD248C38B2].der",
+    #         name="test_user"
+    #     )
+    server_cert = Path("certs/certs/myserver.der")
+    server_private_key = Path("certs/certs/myserver.pem")
+    host_name = socket.gethostname()
+    server_app_uri = f"urn:{host_name}:foobar:myserver" # 
+    # server_app_uri = f"myselfsignedserver@{host_name}"
+    # print(server_app_uri)
+
+
+
     server = Server()
+    # server = Server()
     await server.init()
+    await server.set_application_uri(server_app_uri)
     server.set_endpoint(OPC_SERVER_ENDPOINT)
+    server.set_security_IDs("Anonymous")
     namespace = await server.register_namespace("UR10eRobot")
+
+    # await setup_self_signed_certificate(
+    #     server_private_key,
+    #     server_cert,
+    #     server_app_uri,
+    #     host_name,
+    #     [ExtendedKeyUsageOID.CLIENT_AUTH, ExtendedKeyUsageOID.SERVER_AUTH],
+    #     {
+    #     },
+    # )
+
+    # load server certificate and private key. This enables endpoints
+    # with signing and encryption.
+    # await server.load_certificate(str(server_cert))
+    # await server.load_private_key(str(server_private_key))
+
+    # server.set_security_policy([ua.SecurityPolicyType.NoSecurity])
 
     # Create a new OPC UA node under Objects node
     objects = server.get_objects_node()

@@ -70,7 +70,7 @@ async def main():
     server_cert = Path("certs/certs/myserver.der")
     server_private_key = Path("certs/certs/myserver.pem")
     host_name = socket.gethostname()
-    server_app_uri = f"urn:{host_name}:foobar:myserver" # 
+    # server_app_uri = f"urn:{host_name}:foobar:myserver" # 
     # server_app_uri = f"myselfsignedserver@{host_name}"
     # print(server_app_uri)
 
@@ -79,7 +79,7 @@ async def main():
     server = Server()
     # server = Server()
     await server.init()
-    await server.set_application_uri(server_app_uri)
+    # await server.set_application_uri(server_app_uri)
     server.set_endpoint(OPC_SERVER_ENDPOINT)
     server.set_security_IDs("Anonymous")
     namespace = await server.register_namespace("UR10eRobot")
@@ -99,7 +99,7 @@ async def main():
     # await server.load_certificate(str(server_cert))
     # await server.load_private_key(str(server_private_key))
 
-    # server.set_security_policy([ua.SecurityPolicyType.NoSecurity])
+    server.set_security_policy([ua.SecurityPolicyType.NoSecurity])
 
     # Create a new OPC UA node under Objects node
     objects = server.get_objects_node()

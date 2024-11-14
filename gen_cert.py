@@ -50,9 +50,10 @@ def generate_private_key_for_myserver():
 
 async def generate_self_signed_certificate():
     subject_alt_names: List[x509.GeneralName] = [
-        x509.UniformResourceIdentifier(f"urn:{HOSTNAME}:foobar:myselfsignedserver"),
+        x509.UniformResourceIdentifier(f"urn:{HOSTNAME}:freeopcua:python:server"),
         x509.DNSName(f"{HOSTNAME}"),
-        x509.IPAddress(ipaddress.IPv4Address('0.0.0.0'))
+        x509.DNSName("localhost"),
+        x509.IPAddress(ipaddress.IPv4Address('127.0.0.1'))
     ]
 
     # key: RSAPrivateKey = generate_private_key()
@@ -86,8 +87,10 @@ def generate_applicationgroup_ca():
 
 async def generate_csr():
     subject_alt_names: List[x509.GeneralName] = [
-        x509.UniformResourceIdentifier(f"urn:{HOSTNAME}:foobar:myserver"),
+        x509.UniformResourceIdentifier(f"urn:{HOSTNAME}:freeopcua:python:server"),
         x509.DNSName(f"{HOSTNAME}"),
+        x509.DNSName("localhost"),
+        x509.IPAddress(ipaddress.IPv4Address('127.0.0.1'))
     ]
 
     key: RSAPrivateKey = generate_private_key()

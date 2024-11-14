@@ -54,7 +54,7 @@ MODBUS_REGISTERS = {
 
 
 # OPC UA Server configuration
-OPC_SERVER_ENDPOINT = "opc.tcp://localhost:4840"
+OPC_SERVER_ENDPOINT = "opc.tcp://127.0.0.1:4840"
 
 def to_signed(val):
     if val>32768:
@@ -67,19 +67,19 @@ async def main():
     #         "ThinkIQ.Opc.Ua.Connector [23B9EA5C7A3DD59361B14486BC12A8DD248C38B2].der",
     #         name="test_user"
     #     )
-    server_cert = Path("certs/certs/myserver.der")
+    server_cert = Path("certs/certs/myserver-selfsigned.der")
     server_private_key = Path("certs/certs/myserver.pem")
     host_name = socket.gethostname()
-    # server_app_uri = f"urn:{host_name}:foobar:myserver" # 
+    server_app_uri = f"urn:{host_name}:freeopcua:python:server" # 
     # server_app_uri = f"myselfsignedserver@{host_name}"
-    # print(server_app_uri)
+    print(server_app_uri)
 
 
 
     server = Server()
     # server = Server()
     await server.init()
-    # await server.set_application_uri(server_app_uri)
+    await server.set_application_uri(server_app_uri)
     server.set_endpoint(OPC_SERVER_ENDPOINT)
     server.set_security_IDs("Anonymous")
     namespace = await server.register_namespace("UR10eRobot")
@@ -96,10 +96,14 @@ async def main():
 
     # load server certificate and private key. This enables endpoints
     # with signing and encryption.
-    # await server.load_certificate(str(server_cert))
-    # await server.load_private_key(str(server_private_key))
+    await server.load_certificate(str(server_cert))
+    await server.load_private_key(str(server_private_key))
 
-    server.set_security_policy([ua.SecurityPolicyType.NoSecurity])
+    server.set_security_policy([
+            ua.SecurityPolicyType.NoSecurity,
+            ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt,
+            ua.SecurityPolicyType.Basic256Sha256_Sign,
+            ])
 
     # Create a new OPC UA node under Objects node
     objects = server.get_objects_node()

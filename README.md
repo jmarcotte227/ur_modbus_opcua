@@ -1,4 +1,5 @@
-Interface developed as an OPC/UA interface for the UR10e by communicating over Modbus TCP. 
+# ur_modbus_opcua
+An interface developed as an OPC/UA interface for the UR10e by communicating over Modbus TCP. 
 
 # Installation
 

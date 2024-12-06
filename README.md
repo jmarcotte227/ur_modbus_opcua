@@ -4,9 +4,9 @@ Interface developed as an OPC/UA interface for the UR10e by communicating over M
 
 After installing [Python Version 3.11.9](https://www.python.org/downloads/release/python-3119/), clone the repository to "C:\", and install the required dependencies using 
 
-'''
+```
 pip install -r requirements.txt
-''' 
+```
 
 Follow [these instructions](https://help.thinkiq.com/knowledge-base/data-connectivity/gateways-connectors/gateway-connectors-setup) to install the OPCUA connector to get data into the SMIP 
 
@@ -14,7 +14,8 @@ Follow the instructions in [this guide](https://www.computerhope.com/issues/ch00
 
 # Known Errors 
 1. North Service Fails to Start
-   - Solution is unknown
+   - Ensure that .NET dependencies in the connector documentation are properly installed.
+  
 Developed for the Advanced Manufacturing Processes and Systems course at Rensselaer Polytechnic Institute by the Digital Manufacturing Project Team:
 - Brian Cooper
 - Julia Gizzo

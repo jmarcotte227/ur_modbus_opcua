@@ -109,17 +109,17 @@ def to_signed(val):
     return val
 async def main():
     # Initialize OPC UA server
-    cert_user_manager= CertificateUserManager()
+    # cert_user_manager= CertificateUserManager()
     user_manager = UserManager()
-    await cert_user_manager.add_admin(
-            "ThinkIQ.Opc.Ua.Client [2FF65ABC6B838E82CEB4C7DEC3A77149CE0EE150].der",
-            name="ThinkIQ.Opc.Ua.Client"
-        )
+    # await cert_user_manager.add_admin(
+    #         "ThinkIQ.Opc.Ua.Client [2FF65ABC6B838E82CEB4C7DEC3A77149CE0EE150].der",
+    #         name="ThinkIQ.Opc.Ua.Client"
+    #     )
 
-    await cert_user_manager.add_admin(
-            "ThinkIQ.Opc.Ua.Connector [2389399CBF50444980C5A85BD62C7807CBA16D58].der",
-            name="ThinkIQ.Opc.Ua.Connector"
-        )
+    # await cert_user_manager.add_admin(
+    #         "ThinkIQ.Opc.Ua.Connector [2389399CBF50444980C5A85BD62C7807CBA16D58].der",
+    #         name="ThinkIQ.Opc.Ua.Connector"
+    #     )
 
     server_cert = Path("certs/certs/myserver-selfsigned.der")
     server_private_key = Path("certs/private/myserver.pem")

@@ -8,6 +8,7 @@
 
 import asyncio
 from pymodbus.client import AsyncModbusTcpClient
+import pymodbus
 from asyncua import Server
 from asyncua import ua
 from asyncua.server.user_managers import CertificateUserManager
@@ -96,6 +97,7 @@ MODBUS_REGISTERS = {
     "PowerPresses": [264],
     "StopRecommended": [265],
     "SafetyMode": [266],
+    "RobotMode": [258]
 
 }
 
@@ -184,38 +186,42 @@ async def main():
     print(f"OPC UA server started at {OPC_SERVER_ENDPOINT}")
     # print(opc_variables)
     # Initialize Modbus client (asynchronous)
-    client = AsyncModbusTcpClient(UR10e_MODBUS_IP, port=MODBUS_PORT)
-    await client.connect()
-    print(f"Connected to Modbus server at {UR10e_MODBUS_IP}:{MODBUS_PORT}")
-    # print("OPC Variables: ", opc_variables)
-    try:
-        while True:
-            # Iterate through the Modbus register groups
-            for reg_name, reg_list in MODBUS_REGISTERS.items():
-                for i, reg in enumerate(reg_list):
-                    # Read each register from the UR10e robot
-                    result = await client.read_holding_registers(reg, 1)
-                    if result.isError():
-                        print(f"Failed to read {reg_name} (Register {reg})")
-                        print(f"Result: {result}")
-                    else:
-                        modbus_value = to_signed(result.registers[0])
-                        # print("Modbus Value: ",(modbus_value))
-                        # Update OPC UA node with Modbus data
-                        await opc_variables[reg_name][i].write_value(ua.Int16(modbus_value))
-                        # print(f"Updated {reg_name} (Register {reg}) with value: {modbus_value}")
+    while True:
+        try:
+            client = AsyncModbusTcpClient(UR10e_MODBUS_IP, port=MODBUS_PORT)
+            await client.connect()
+            print(f"Connected to Modbus server at {UR10e_MODBUS_IP}:{MODBUS_PORT}")
+            # print("OPC Variables: ", opc_variables)
+            while True:
+                # Iterate through the Modbus register groups
+                for reg_name, reg_list in MODBUS_REGISTERS.items():
+                    for i, reg in enumerate(reg_list):
+                        # Read each register from the UR10e robot
+                        result = await client.read_holding_registers(reg, 1)
+                        if result.isError():
+                            print(f"Failed to read {reg_name} (Register {reg})")
+                            print(f"Result: {result}")
+                        else:
+                            modbus_value = to_signed(result.registers[0])
+                            # print("Modbus Value: ",(modbus_value))
+                            # Update OPC UA node with Modbus data
+                            await opc_variables[reg_name][i].write_value(ua.Int16(modbus_value))
+                            # print(f"Updated {reg_name} (Register {reg}) with value: {modbus_value}")
 
-            # print("Updated all modbus registers")
-            await asyncio.sleep(0.5)  # Sleep for a while before fetching data again
+                # print("Updated all modbus registers")
+                await asyncio.sleep(0.5)  # Sleep for a while before fetching data again
 
-    except asyncio.CancelledError:
-        print("Shutting down...")
+        except asyncio.CancelledError:
+            print("Shutting down...")
+            break
 
-    finally:
-        # Stop OPC UA server and disconnect Modbus client
-        await server.stop()
-        client.close()
-        print("Server and Modbus client shut down.")
+        except pymodbus.exceptions.ConnectionException:
+            print("Lost connection to modbus, trying to reconnect in 5 seconds")
+
+    # Stop OPC UA server and disconnect Modbus client
+    await server.stop()
+    client.close()
+    print("Server and Modbus client shut down.")
 
 
 # Run the async main loop

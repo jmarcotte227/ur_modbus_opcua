@@ -15,6 +15,8 @@ Follow the instructions in [this guide](https://www.computerhope.com/issues/ch00
 
 UA Expert can be installed and run on the host machine to verify that the OPC UA output is functioning.
 
+While not required for the ThinkIQ connector, credentials can be generated using the "gen_cridential.py" script included in the repository.
+
 # Known Errors 
 1. North Service Fails to Start
    - Ensure that .NET dependencies in the connector documentation are properly installed.

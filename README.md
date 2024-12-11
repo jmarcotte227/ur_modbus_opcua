@@ -13,6 +13,8 @@ Follow [these instructions](https://help.thinkiq.com/knowledge-base/data-connect
 
 Follow the instructions in [this guide](https://www.computerhope.com/issues/ch000322.htm#:~:text=Run%20a%20batch%20file%20at%20loading%20of%20Windows%208%20and%2010&text=Press%20Start%2C%20type%20Run%2C%20and,file%20into%20the%20Startup%20folder.) to add the startup script to run on boot. Note: If there is more than one user on the computer, this method will require a user to sign in to work.
 
+UA Expert can be installed and run on the host machine to verify that the OPC UA output is functioning.
+
 # Known Errors 
 1. North Service Fails to Start
    - Ensure that .NET dependencies in the connector documentation are properly installed.

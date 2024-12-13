@@ -17,6 +17,14 @@ UA Expert can be installed and run on the host machine to verify that the OPC UA
 
 While not required for the ThinkIQ connector, credentials can be generated using the "gen_cridential.py" script included in the repository.
 
+# Program Modification
+
+If the IP address of the robot changes, the python script will need to be updated accordingly. On line 29, the address of the UR10e can be set by changing the "UR10e_MODBUS_IP" variable to the IP address of the machine.
+
+In order to change the parameters being read from the robot, you can modify the dictionary titled "MODBUS_REGISTERS" starting on line 33. Additional attribute names, along with the relevant Modbus TCP/IP register can be added to the end of this dictionary.
+
+The wait period between measurements is approximately 0.5 seconds by default. This can be changed by changing the delay about in line 212 of the server script.
+
 # Known Errors 
 1. North Service Fails to Start
    - Ensure that .NET dependencies in the connector documentation are properly installed.
